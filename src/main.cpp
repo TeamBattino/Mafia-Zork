@@ -1,6 +1,5 @@
 #include "main.h"
 #include "game.h"
-
 #include <iostream>
 using std::cout;
 using std::endl;

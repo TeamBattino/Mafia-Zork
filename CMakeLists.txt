@@ -37,6 +37,9 @@ file(COPY ${data} DESTINATION resources)
 
 target_link_libraries(zork PUBLIC
   # here you can add any library dependencies
+  PRIVATE ftxui::screen
+  PRIVATE ftxui::dom
+  PRIVATE ftxui::component  # Not needed for this example.
 )
 
 ###############################################################################
@@ -64,3 +67,19 @@ set(CPACK_MONOLITHIC_INSTALL 1)
 
 # This must be last
 include(CPack)
+
+# --- Fetch FTXUI --------------------------------------------------------------
+include(FetchContent)
+
+set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
+set(FETCHCONTENT_QUIET OFF)
+
+FetchContent_Declare(ftxui
+  GIT_REPOSITORY https://github.com/arthursonzogni/ftxui.git
+  GIT_TAG        v5.0.0
+  GIT_PROGRESS   TRUE
+  GIT_SHALLOW    TRUE
+  EXCLUDE_FROM_ALL
+)
+FetchContent_MakeAvailable(ftxui)
+# ------------------------------------------------------------------------------
