@@ -1,6 +1,8 @@
 #include "main.h"
 #include "game.h"
+#include "town.h"
 #include <iostream>
+#include <string>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
 using std::cout;
@@ -25,6 +27,11 @@ int main(int argc, char **argv)
   );
   Render(screen, document);
   screen.Print();
+
+  Town town = Town();
+  town.dothing();
+  Town town2 = Town("Town2", 100);
+  town2.dothing();
 
   Game game = Game();
   game.run();
