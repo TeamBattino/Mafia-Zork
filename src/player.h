@@ -1,12 +1,17 @@
 #pragma once
 
-class Player{
-    public:
-        double get_balance();
+class Player
+{
+public:
+    // Constructors
+    Player();
 
-        double set_balance(int amount);
+    // Getters
+    double get_balance();
 
-    private:
-        double balance = 100;
+    // Setters
+    void set_balance(int amount);
+
+private:
+    double balance = 100;
 }
-¨
