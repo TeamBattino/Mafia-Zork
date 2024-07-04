@@ -1,17 +1,26 @@
 #pragma once
-#include "town.h"
 #include <vector>
+#include "town.h"
 #include "player.h"
 
-using namespace std;
 class Game
 {
 private:
-    vector<Town> towns;
-    int active_town = 0;
+    // Members
+    std::vector<Town> towns;
     Player player;
+    int active_town = 0;
+
+    // Functions
+    void handle_command(string *command);
+    // Print Functions
+    void printBalance();
 
 public:
+    // Constructor
     Game();
+    // Functions
+    void print_status();
     void run();
+    void get_command();
 };
