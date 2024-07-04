@@ -1,18 +1,17 @@
 #include "game.h"
 #include <iostream>
 
+using namespace std;
+
 Game::Game()
 {
-    std::cout << "Default Game Constructor" << std::endl;
-    this->towns = [ new Town("small Town", 50), new Town("medium Town", 100), new Town("City", 500) ];
+    cout << "Default Game Constructor" << std::endl;
+    towns = vector<Town>(new Town("Town1", 100), new Town("Town2", 200), new Town("Town3", 300));
+    player = Player();
+    active_town = 0;
 }
 
 void Game::run()
 {
     std::cout << "Game Running" << std::endl;
-}
-
-void Game::handleCommand(std::string command)
-{
-    std::cout << "Game Handling Command: " << command << std::endl;
 }

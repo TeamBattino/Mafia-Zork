@@ -1,7 +1,5 @@
 #include "player.h"
 
-using namespace std;
-
 double Player::get_balance()
 {
     return balance;
