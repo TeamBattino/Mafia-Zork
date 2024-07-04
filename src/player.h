@@ -3,10 +3,7 @@
 class Player
 {
 public:
-    // Constructors
-    Player();
-
-    // Getters
+    // Getters & Setter
     double get_balance();
 
     bool set_balance(int amount);

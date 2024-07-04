@@ -12,13 +12,15 @@ private:
     int active_town = 0;
 
     // Functions
-    void handle_command(string *command);
+    void handle_command(const std::vector<std::string> &command_vec);
+    std::vector<std::string> splitCommand(const std::string &command);
     // Print Functions
     void printBalance();
 
 public:
     // Constructor
     Game();
+
     // Functions
     void print_status();
     void run();
