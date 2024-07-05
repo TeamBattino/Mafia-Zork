@@ -2,7 +2,8 @@
 #include <vector>
 #include "town.h"
 #include "player.h"
-
+#include "drug.h"
+#include <string>
 class Game
 {
 private:
@@ -22,6 +23,7 @@ public:
     Game();
 
     // Functions
+    void process_round();
     void print_status();
     void print_help();
     void run();

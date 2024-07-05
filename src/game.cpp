@@ -61,6 +61,15 @@ void Game::handle_base_command(string command)
     }
 }
 
+void Game::process_round()
+{
+    // Process the round
+    float update_balance = 0;
+
+    // Update the balance
+    this->player.set_balance(this->player.get_balance() + (double)update_balance);
+}
+
 // Print Functions
 void Game::print_help()
 {
