@@ -23,25 +23,29 @@ void Game::run()
 {
     while (true)
     {
-        get_command();
+        string command = get_command();
+        handle_base_command(command);
     }
 }
 
-void Game::get_command()
+string Game::get_command()
 {
     string command;
     cout << "\033[1;32m❯ \033[0m";
     cin >> command;
-    // split the command at " " into a vector<String>
-    handle_command(command);
+    return command;
 }
 
-void Game::handle_command(string command)
+void Game::handle_base_command(string command)
 {
 
     if (command == "quit")
     {
         exit(0);
+    }
+    else if (command == "help")
+    {
+        print_help();
     }
     else if (command == "stats")
     {
@@ -51,6 +55,30 @@ void Game::handle_command(string command)
     {
         cout << "Invalid Command" << endl;
     }
+}
+
+// Print Functions
+void Game::print_help()
+{
+    using namespace ftxui;
+
+    auto avalible_commands = text("Available Commands: ") | bold | color(Color::Blue) | hcenter | size(WIDTH, EQUAL, 20) | border;
+    auto quit = text("quit - Exit the game") | color(Color::White) | hcenter | size(WIDTH, EQUAL, 20);
+    auto help = text("help - Display this message") | color(Color::White) | hcenter | size(WIDTH, EQUAL, 20);
+    auto stats = text("stats - Display the current status") | color(Color::White) | hcenter | size(WIDTH, EQUAL, 20);
+    ftxui::Element separator = ftxui::separator() | ftxui::size(WIDTH, EQUAL, 20);
+    auto document = vbox(
+        avalible_commands,
+        separator,
+        quit,
+        separator,
+        help,
+        separator,
+        stats);
+    auto screen = Screen::Create(Dimension::Fit(document));
+    Render(screen, document);
+    screen.Print();
+    std::cout << std::endl;
 }
 
 void Game::print_status()
