@@ -89,6 +89,14 @@ void Game::process_round()
 {
     // Process the round
     float update_balance = 0;
+    for (unsigned long int i = 0; i < towns[active_town].local_drugs.size(); i++)
+    {
+        if (towns[active_town].local_drugs[i].quantity > 0 && towns[active_town].local_drugs[i].auto_sell)
+        {
+            towns[active_town].local_drugs[i].quantity--;
+            update_balance += towns[active_town].local_drugs[i].sale_price;
+        }
+    }
 
     // Update the balance
     this->player.set_balance(this->player.get_balance() + (double)update_balance);
