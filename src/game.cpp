@@ -51,11 +51,7 @@ void Game::handle_base_command(string command)
     {
         print_status();
     }
-    else if (command->compare("balance") == 0)
-    {
-        printBalance();
-    }
-    else if (command->compare("recruit") == 0)
+    else if (command == "recruit")
     {
         recruit();
     }
@@ -70,20 +66,19 @@ void Game::print_help()
 {
     using namespace ftxui;
 
-    auto avalible_commands = text("Available Commands: ") | bold | color(Color::Blue) | hcenter | size(WIDTH, EQUAL, 20) | border;
-    auto quit = text("quit - Exit the game") | color(Color::White) | hcenter | size(WIDTH, EQUAL, 20);
-    auto help = text("help - Display this message") | color(Color::White) | hcenter | size(WIDTH, EQUAL, 20);
-    auto stats = text("stats - Display the current status") | color(Color::White) | hcenter | size(WIDTH, EQUAL, 20);
-    ftxui::Element separator = ftxui::separator() | ftxui::size(WIDTH, EQUAL, 20);
+    auto avalible_commands = text("Available Commands: ") | bold | color(Color::Blue) | hcenter | border;
+    auto quit = text("quit - Exit the game") | color(Color::White) | hcenter;
+    auto help = text("help - Display this message") | color(Color::White) | hcenter;
+    auto stats = text("stats - Display the current status") | color(Color::White) | hcenter;
+    ftxui::Element separator = ftxui::separator() | color(Color::White);
     auto document = vbox(
         avalible_commands,
-        separator,
         quit,
         separator,
         help,
         separator,
         stats);
-    auto screen = Screen::Create(Dimension::Fit(document));
+    auto screen = Screen::Create(Dimension::Fit(document), Dimension::Fit(document));
     Render(screen, document);
     screen.Print();
     std::cout << std::endl;
@@ -134,11 +129,9 @@ void Game::recruit()
     }
     else
     {
-        string bribe_choice;
-        cout >> "Do you want to try and bribe him?" >> endl;
-        cin << bribe_choice;
-
-        if (bribe_choice.choice("y"))
+        cout << "Do you want to try and bribe him?" << endl;
+        string bribe_choice = get_command();
+        if (bribe_choice == "y")
         {
             recruit_bribe(101);
         }
@@ -183,75 +176,7 @@ void Game::recruit_bribe(int amount)
     }
     else
     {
-        cout << 'Youre broke.' << endl;
-    }
-}
-
-void Game::recruit_force()
-{
-    towns[active_town].reputation++;
-    towns[active_town].influence--;
-}
-
-void Game::recruit()
-{
-    if (random_by_chance(towns[active_town].reputation / 2))
-    {
-        towns[active_town].recruits++;
-        cout << "Amount of recruits: " << towns[active_town].recruits << endl;
-    }
-    else
-    {
-        string bribe_choice;
-        cout >> "Do you want to try and bribe him?" >> endl;
-        cin << bribe_choice;
-
-        if (bribe_choice.choice("y"))
-        {
-            recruit_bribe(101);
-        }
-    }
-}
-
-bool Game::random_by_chance(int chance)
-{
-    srand((unsigned)time(0));
-
-    auto test = (rand() % 100) < (chance);
-    cout << test << endl;
-    return test;
-}
-
-void Game::recruit_bribe(int amount)
-{
-    if (amount >= player.get_balance())
-    {
-        if (random_by_chance(towns[active_town].reputation / 2))
-        {
-            player.set_balance(-amount);
-            towns[active_town].reputation++;
-            towns[active_town].recruits++;
-
-            cout << "Amount of recruits: " << towns[active_town].recruits << endl;
-        }
-        else
-        {
-            towns[active_town].reputation--;
-
-            string force_choice;
-            cout << "Looks like hes not corrupt. Do you want to force him? (y/n)";
-            cin >> force_choice;
-
-            if (force_choice.compare("y") == 0)
-            {
-                recruit_force();
-                towns[active_town].recruits++;
-            }
-        }
-    }
-    else
-    {
-        cout << 'Youre broke.' << endl;
+        cout << "Youre broke." << endl;
     }
 }
 

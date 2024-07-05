@@ -13,7 +13,6 @@ private:
 
     // Functions
     // Print Functions
-    void printBalance();
     bool random_by_chance(int chance);
 
     void handle_base_command(string command);
