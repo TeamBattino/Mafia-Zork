@@ -2,5 +2,5 @@
 
 # TODO:
 ## Recruitment:
-- Higher chance of successful recruitment based on reputation
-- - On fail, option for bribe (reputation goes slightly down), if that fails, either leave him or force him to join (reputation and influence goes down)
+- Higher chance of successful recruitment based on reputation 
+- - On fail (reputation will go down), option for bribe (reputation will increase if successful), if that fails (reputation will go down), if force him to join (reputation will go up influence goes down)

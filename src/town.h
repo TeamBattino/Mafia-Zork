@@ -12,6 +12,7 @@ public:
     int population;
     int reputation;
     int influence;
+    int recruits;
     Town();
     Town(string name, int population);
     void dothing();

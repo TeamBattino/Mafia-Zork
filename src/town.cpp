@@ -9,8 +9,9 @@ Town::Town(string name, int population)
     cout << "Town Constructor" << std::endl;
     this->name = name;
     this->population = population;
-    this->reputation = 0;
-    this->influence = 0;
+    this->reputation = 100;
+    this->influence = 100;
+    this->recruits = 0;
 }
 
 Town::Town()
@@ -18,8 +19,9 @@ Town::Town()
     cout << "Town Constructor" << std::endl;
     this->name = "Default Town Name";
     this->population = 0;
-    this->reputation = 0;
-    this->influence = 0;
+    this->reputation = 100;
+    this->influence = 100;
+    this->recruits = 0;
 }
 
 void Town::dothing()

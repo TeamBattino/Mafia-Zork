@@ -51,6 +51,14 @@ void Game::handle_base_command(string command)
     {
         print_status();
     }
+    else if (command->compare("balance") == 0)
+    {
+        printBalance();
+    }
+    else if (command->compare("recruit") == 0)
+    {
+        recruit();
+    }
     else
     {
         cout << "Invalid Command" << endl;
@@ -115,4 +123,140 @@ void Game::print_status()
     Render(screen, document);
     screen.Print();
     std::cout << std::endl;
+}
+
+void Game::recruit()
+{
+    if (random_by_chance(towns[active_town].reputation / 2))
+    {
+        towns[active_town].recruits++;
+        cout << "Amount of recruits: " << towns[active_town].recruits << endl;
+    }
+    else
+    {
+        string bribe_choice;
+        cout >> "Do you want to try and bribe him?" >> endl;
+        cin << bribe_choice;
+
+        if (bribe_choice.choice("y"))
+        {
+            recruit_bribe(101);
+        }
+    }
+}
+
+bool Game::random_by_chance(int chance)
+{
+    srand((unsigned)time(0));
+
+    auto test = (rand() % 100) < (chance);
+    cout << test << endl;
+    return test;
+}
+
+void Game::recruit_bribe(int amount)
+{
+    if (amount >= player.get_balance())
+    {
+        if (random_by_chance(towns[active_town].reputation / 2))
+        {
+            player.set_balance(-amount);
+            towns[active_town].reputation++;
+            towns[active_town].recruits++;
+
+            cout << "Amount of recruits: " << towns[active_town].recruits << endl;
+        }
+        else
+        {
+            towns[active_town].reputation--;
+
+            string force_choice;
+            cout << "Looks like hes not corrupt. Do you want to force him? (y/n)";
+            cin >> force_choice;
+
+            if (force_choice.compare("y") == 0)
+            {
+                recruit_force();
+                towns[active_town].recruits++;
+            }
+        }
+    }
+    else
+    {
+        cout << 'Youre broke.' << endl;
+    }
+}
+
+void Game::recruit_force()
+{
+    towns[active_town].reputation++;
+    towns[active_town].influence--;
+}
+
+void Game::recruit()
+{
+    if (random_by_chance(towns[active_town].reputation / 2))
+    {
+        towns[active_town].recruits++;
+        cout << "Amount of recruits: " << towns[active_town].recruits << endl;
+    }
+    else
+    {
+        string bribe_choice;
+        cout >> "Do you want to try and bribe him?" >> endl;
+        cin << bribe_choice;
+
+        if (bribe_choice.choice("y"))
+        {
+            recruit_bribe(101);
+        }
+    }
+}
+
+bool Game::random_by_chance(int chance)
+{
+    srand((unsigned)time(0));
+
+    auto test = (rand() % 100) < (chance);
+    cout << test << endl;
+    return test;
+}
+
+void Game::recruit_bribe(int amount)
+{
+    if (amount >= player.get_balance())
+    {
+        if (random_by_chance(towns[active_town].reputation / 2))
+        {
+            player.set_balance(-amount);
+            towns[active_town].reputation++;
+            towns[active_town].recruits++;
+
+            cout << "Amount of recruits: " << towns[active_town].recruits << endl;
+        }
+        else
+        {
+            towns[active_town].reputation--;
+
+            string force_choice;
+            cout << "Looks like hes not corrupt. Do you want to force him? (y/n)";
+            cin >> force_choice;
+
+            if (force_choice.compare("y") == 0)
+            {
+                recruit_force();
+                towns[active_town].recruits++;
+            }
+        }
+    }
+    else
+    {
+        cout << 'Youre broke.' << endl;
+    }
+}
+
+void Game::recruit_force()
+{
+    towns[active_town].reputation++;
+    towns[active_town].influence--;
 }

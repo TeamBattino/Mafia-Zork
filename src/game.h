@@ -12,6 +12,10 @@ private:
     int active_town = 0;
 
     // Functions
+    // Print Functions
+    void printBalance();
+    bool random_by_chance(int chance);
+
     void handle_base_command(string command);
 
 public:
@@ -23,4 +27,7 @@ public:
     void print_help();
     void run();
     string get_command();
+    void recruit();
+    void recruit_bribe(int amount);
+    void recruit_force();
 };
