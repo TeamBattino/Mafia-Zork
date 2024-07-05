@@ -66,18 +66,22 @@ void Game::print_help()
 {
     using namespace ftxui;
 
-    auto avalible_commands = text("Available Commands: ") | bold | color(Color::Blue) | hcenter | border;
-    auto quit = text("quit - Exit the game") | color(Color::White) | hcenter;
-    auto help = text("help - Display this message") | color(Color::White) | hcenter;
-    auto stats = text("stats - Display the current status") | color(Color::White) | hcenter;
-    ftxui::Element separator = ftxui::separator() | color(Color::White);
+    auto avalible_commands = text("Available Commands: ") | bold | color(Color::Blue);
+    auto quit = text("quit - Exit the game") | color(Color::White);
+    auto help = text("help - Display this message") | color(Color::White);
+    auto stats = text("stats - Display the current status") | color(Color::White);
+    ftxui::Element separatorHeader = ftxui::separator() | color(Color::White);
+    ftxui::Element separator1 = ftxui::separatorDashed() | color(Color::White);
+    ftxui::Element separator2 = ftxui::separatorDashed() | color(Color::White);
     auto document = vbox(
-        avalible_commands,
-        quit,
-        separator,
-        help,
-        separator,
-        stats);
+                        avalible_commands,
+                        separatorHeader,
+                        quit,
+                        separator1,
+                        help,
+                        separator2,
+                        stats) |
+                    border;
     auto screen = Screen::Create(Dimension::Fit(document), Dimension::Fit(document));
     Render(screen, document);
     screen.Print();
