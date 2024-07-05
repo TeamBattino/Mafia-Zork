@@ -3,9 +3,6 @@
 class Player
 {
 public:
-    // Constructors
-    Player();
-
     // Getters
     double get_balance();
 

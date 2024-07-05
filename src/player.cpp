@@ -9,7 +9,7 @@ bool Player::set_balance(int amount)
 {
     if (amount > 0)
     {
-        balance = amount;
+        balance = balance + amount;
         return true;
     }
     return false;
