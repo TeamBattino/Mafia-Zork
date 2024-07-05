@@ -7,15 +7,15 @@
 #include <iostream>                // for endl, cout, ostream
 #include <string>                  // for basic_string, allocator, string
 #include <vector>                  // for vector
-#include "ftxui/dom/node.hpp"      // for Render
-#include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::Cyan, Color::White, ftxui
+#include <ftxui/dom/node.hpp>      // for Render
+#include <ftxui/screen/color.hpp>  // for Color, Color::Blue, Color::Cyan, Color::White, ftxui
 
 Game::Game()
 {
     cout << "Default Game Constructor" << endl;
-    towns.push_back(Town("Town1", 100));
-    towns.push_back(Town("Town2", 200));
-    towns.push_back(Town("Town3", 300));
+    towns.push_back(Town("Town1", 100, {Drug("Dopamine", 50, 100, 0)}));
+    towns.push_back(Town("Town2", 200, {Drug("Dopamine", 50, 100, 0), Drug("Serotonin", 50, 100, 0)}));
+    towns.push_back(Town("Town3", 300, {Drug("Dopamine", 50, 100, 0), Drug("Serotonin", 50, 100, 0), Drug("Adrenaline", 50, 100, 0), Drug("Endorphin", 50, 100, 0)}));
     active_town = 0;
 }
 

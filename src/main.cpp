@@ -1,5 +1,4 @@
 #include "game.h"
-#include "town.h"
 #include <iostream>
 #include <string>
 #include <ftxui/dom/elements.hpp>
