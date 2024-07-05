@@ -7,15 +7,12 @@ class Game
 {
 private:
     // Members
-    std::vector<Town> towns;
+    vector<Town> towns;
     Player player;
     int active_town = 0;
 
     // Functions
-    void handle_command(const std::vector<std::string> &command_vec);
-    std::vector<std::string> splitCommand(const std::string &command);
-    // Print Functions
-    void printBalance();
+    void handle_command(string command);
 
 public:
     // Constructor

@@ -1,6 +1,14 @@
 #include "game.h"
 #include <iostream>
 #include <sstream>
+#include <ftxui/dom/elements.hpp>  // for color, Fit, LIGHT, align_right, bold, DOUBLE
+#include <ftxui/dom/table.hpp>     // for Table, TableSelection
+#include <ftxui/screen/screen.hpp> // for Screen
+#include <iostream>                // for endl, cout, ostream
+#include <string>                  // for basic_string, allocator, string
+#include <vector>                  // for vector
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::Cyan, Color::White, ftxui
 
 Game::Game()
 {
@@ -25,38 +33,19 @@ void Game::get_command()
     cout << "\033[1;32m❯ \033[0m";
     cin >> command;
     // split the command at " " into a vector<String>
-    vector<string> command_vec = splitCommand(command);
-    handle_command(command_vec);
+    handle_command(command);
 }
 
-vector<string> Game::splitCommand(const string &command)
+void Game::handle_command(string command)
 {
-    vector<string> result;
-    stringstream ss(command);
-    string word;
 
-    while (ss >> word)
-    {
-        result.push_back(word);
-    }
-
-    return result;
-}
-
-void Game::handle_command(const vector<string> &command_vec)
-{
-    const string command = command_vec[0];
-    if (command.compare("quit") == 0)
+    if (command == "quit")
     {
         exit(0);
     }
-    else if (command.compare("stats") == 0)
+    else if (command == "stats")
     {
         print_status();
-    }
-    else if (command.compare("balance") == 0)
-    {
-        printBalance();
     }
     else
     {
@@ -64,16 +53,38 @@ void Game::handle_command(const vector<string> &command_vec)
     }
 }
 
-// Print Functions
-void Game::printBalance()
-{
-    cout << "Player balance: " << player.get_balance() << endl;
-}
-
 void Game::print_status()
 {
-    cout << "Player balance: " << player.get_balance() << endl;
-    cout << towns[active_town].name << " Population: " << towns[active_town].population << endl;
-    cout << towns[active_town].name << " Local Reputation: " << towns[active_town].reputation << endl;
-    cout << towns[active_town].name << " Cyndicate Influence: " << towns[active_town].influence << endl;
+    using namespace ftxui;
+
+    auto table = Table({
+        {"Name", "Population", "Influence", "Balance"},
+        {towns[0].name, to_string(towns[0].population), to_string(towns[0].influence), "CHF " + to_string(player.get_balance())},
+    });
+
+    table.SelectAll().Border(LIGHT);
+
+    // Add border around the first column.
+    table.SelectColumn(0).Border(LIGHT);
+
+    // Make first row bold with a double border.
+    table.SelectRow(0).Decorate(bold);
+    table.SelectRow(0).SeparatorVertical(LIGHT);
+    table.SelectRow(0).Border(DOUBLE);
+
+    // Align right the "Release date" column.
+    table.SelectColumn(2).DecorateCells(align_right);
+
+    // Select row from the second to the last.
+    auto content = table.SelectRows(1, -1);
+    // Alternate in between 3 colors.
+    content.DecorateCellsAlternateRow(color(Color::Blue), 3, 0);
+    content.DecorateCellsAlternateRow(color(Color::Cyan), 3, 1);
+    content.DecorateCellsAlternateRow(color(Color::White), 3, 2);
+
+    auto document = table.Render();
+    auto screen = Screen::Create(Dimension::Fit(document));
+    Render(screen, document);
+    screen.Print();
+    std::cout << std::endl;
 }
