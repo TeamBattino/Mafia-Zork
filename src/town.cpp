@@ -27,12 +27,14 @@ Town::Town()
     this->local_drugs = {Drug("Dopamine", 50, 100, 0), Drug("Serotonin", 50, 100, 0), Drug("Adrenaline", 50, 100, 0), Drug("Endorphin", 50, 100, 0)};
 }
 
-void Town::dothing()
+int Town::get_drug_index(const std::string &drug_name)
 {
-
-    cout << name << "Running" << std::endl;
-
-    cout << "Population: " << population << endl;
-    cout << "Reputation: " << reputation << endl;
-    cout << "Influence: " << influence << endl;
+    for (int i = 0; i < local_drugs.size(); i++)
+    {
+        if (local_drugs[i].name == drug_name)
+        {
+            return i;
+        }
+    }
+    return -1;
 }

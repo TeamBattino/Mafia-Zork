@@ -49,7 +49,31 @@ void Game::handle_base_command(string command)
     }
     else if (command == "stats")
     {
-        print_status();
+        print_stats();
+    }
+    else if (command == "stock")
+    {
+        print_stock();
+    }
+    else if (command == "buy")
+    {
+        string drug_name;
+        int amount;
+        cout << "Drug Name: ";
+        cin >> drug_name;
+        cout << "Amount: ";
+        cin >> amount;
+        buy_drug(drug_name, amount);
+    }
+    else if (command == "sell")
+    {
+        string drug_name;
+        int amount;
+        cout << "Drug Name: ";
+        cin >> drug_name;
+        cout << "Amount: ";
+        cin >> amount;
+        sell_drug(drug_name, amount);
     }
     else if (command == "recruit")
     {
@@ -60,7 +84,7 @@ void Game::handle_base_command(string command)
         cout << "Invalid Command" << endl;
     }
 }
-
+// Process Functions
 void Game::process_round()
 {
     // Process the round
@@ -69,70 +93,46 @@ void Game::process_round()
     // Update the balance
     this->player.set_balance(this->player.get_balance() + (double)update_balance);
 }
-
-// Print Functions
-void Game::print_help()
+// Inventory Managment Functions
+void Game::buy_drug(string drug_name, int amount)
 {
-    using namespace ftxui;
-
-    auto avalible_commands = text("Available Commands: ") | bold | color(Color::Blue);
-    auto quit = text("quit - Exit the game") | color(Color::White);
-    auto help = text("help - Display this message") | color(Color::White);
-    auto stats = text("stats - Display the current status") | color(Color::White);
-    ftxui::Element separatorHeader = ftxui::separator() | color(Color::White);
-    ftxui::Element separator1 = ftxui::separatorDashed() | color(Color::White);
-    ftxui::Element separator2 = ftxui::separatorDashed() | color(Color::White);
-    auto document = vbox(
-                        avalible_commands,
-                        separatorHeader,
-                        quit,
-                        separator1,
-                        help,
-                        separator2,
-                        stats) |
-                    border;
-    auto screen = Screen::Create(Dimension::Fit(document), Dimension::Fit(document));
-    Render(screen, document);
-    screen.Print();
-    std::cout << std::endl;
+    int drug_index = towns.at(active_town).get_drug_index(drug_name);
+    if (drug_index == -1)
+    {
+        cout << "Drug not found" << endl;
+        return;
+    }
+    if (towns[active_town].local_drugs[drug_index].purchase_price * amount <= player.get_balance())
+    {
+        towns[active_town].local_drugs[drug_index].quantity += amount;
+        player.set_balance(player.get_balance() - towns[active_town].local_drugs[drug_index].purchase_price * amount);
+    }
+    else
+    {
+        cout << "You dont have enough money" << endl;
+    }
 }
 
-void Game::print_status()
+void Game::sell_drug(string drug_name, int amount)
 {
-    using namespace ftxui;
-
-    auto table = Table({
-        {"Name", "Population", "Influence", "Balance"},
-        {towns[0].name, to_string(towns[0].population), to_string(towns[0].influence), "CHF " + to_string(player.get_balance())},
-    });
-
-    table.SelectAll().Border(LIGHT);
-
-    // Add border around the first column.
-    table.SelectColumn(0).Border(LIGHT);
-
-    // Make first row bold with a double border.
-    table.SelectRow(0).Decorate(bold);
-    table.SelectRow(0).SeparatorVertical(LIGHT);
-    table.SelectRow(0).Border(DOUBLE);
-
-    // Align right the "Release date" column.
-    table.SelectColumn(2).DecorateCells(align_right);
-
-    // Select row from the second to the last.
-    auto content = table.SelectRows(1, -1);
-    // Alternate in between 3 colors.
-    content.DecorateCellsAlternateRow(color(Color::Blue), 3, 0);
-    content.DecorateCellsAlternateRow(color(Color::Cyan), 3, 1);
-    content.DecorateCellsAlternateRow(color(Color::White), 3, 2);
-
-    auto document = table.Render();
-    auto screen = Screen::Create(Dimension::Fit(document));
-    Render(screen, document);
-    screen.Print();
-    std::cout << std::endl;
+    int drug_index = towns.at(active_town).get_drug_index(drug_name);
+    if (drug_index == -1)
+    {
+        cout << "Drug not found" << endl;
+        return;
+    }
+    if (towns[active_town].local_drugs[drug_index].quantity >= amount)
+    {
+        towns[active_town].local_drugs[drug_index].quantity -= amount;
+        player.set_balance(towns[active_town].local_drugs[drug_index].sale_price * amount);
+    }
+    else
+    {
+        cout << "You dont have enough drugs" << endl;
+    }
 }
 
+// Recruit Functions
 void Game::recruit()
 {
     if (random_by_chance(towns[active_town].reputation / 2))
@@ -197,4 +197,89 @@ void Game::recruit_force()
 {
     towns[active_town].reputation++;
     towns[active_town].influence--;
+}
+
+// Print Functions
+void Game::print_help()
+{
+    using namespace ftxui;
+
+    auto avalible_commands = text("Available Commands: ") | bold | color(Color::Blue);
+    auto quit = text("quit - Exit the game") | color(Color::White);
+    auto help = text("help - Display this message") | color(Color::White);
+    auto stats = text("stats - Display the current status") | color(Color::White);
+    ftxui::Element separatorHeader = ftxui::separator() | color(Color::White);
+    ftxui::Element separator1 = ftxui::separatorDashed() | color(Color::White);
+    ftxui::Element separator2 = ftxui::separatorDashed() | color(Color::White);
+    auto document = vbox(
+                        avalible_commands,
+                        separatorHeader,
+                        quit,
+                        separator1,
+                        help,
+                        separator2,
+                        stats) |
+                    border;
+    auto screen = Screen::Create(Dimension::Fit(document), Dimension::Fit(document));
+    Render(screen, document);
+    screen.Print();
+    std::cout << std::endl;
+}
+void Game::print_stock()
+{
+    using namespace ftxui;
+
+    std::vector<std::vector<std::string>> drugData;
+    drugData.push_back({"Name", "Quantity", "Purchase Price", "Sale Price"});
+    for (unsigned long int i = 0; i < towns[active_town].local_drugs.size(); i++)
+    {
+        drugData.push_back({towns[active_town].local_drugs[i].name, std::to_string(towns[active_town].local_drugs[i].quantity), std::to_string(towns[active_town].local_drugs[i].purchase_price), std::to_string(towns[active_town].local_drugs[i].sale_price)});
+    }
+
+    auto table = Table(drugData);
+    table.SelectAll().Border(LIGHT);
+    table.SelectRow(0).Decorate(bold);
+    table.SelectColumn(2).DecorateCells(align_right);
+    table.SelectColumn(3).DecorateCells(align_right);
+    auto document = table.Render();
+    auto screen = Screen::Create(Dimension::Fit(document));
+    Render(screen, document);
+    screen.Print();
+    std::cout << std::endl;
+}
+
+void Game::print_stats()
+{
+    using namespace ftxui;
+
+    auto table = Table({
+        {"Name", "Population", "Influence", "Balance"},
+        {towns[0].name, to_string(towns[0].population), to_string(towns[0].influence), "CHF " + to_string(player.get_balance())},
+    });
+
+    table.SelectAll().Border(LIGHT);
+
+    // Add border around the first column.
+    table.SelectColumn(0).Border(LIGHT);
+
+    // Make first row bold with a double border.
+    table.SelectRow(0).Decorate(bold);
+    table.SelectRow(0).SeparatorVertical(LIGHT);
+    table.SelectRow(0).Border(DOUBLE);
+
+    // Align right the "Release date" column.
+    table.SelectColumn(2).DecorateCells(align_right);
+
+    // Select row from the second to the last.
+    auto content = table.SelectRows(1, -1);
+    // Alternate in between 3 colors.
+    content.DecorateCellsAlternateRow(color(Color::Blue), 3, 0);
+    content.DecorateCellsAlternateRow(color(Color::Cyan), 3, 1);
+    content.DecorateCellsAlternateRow(color(Color::White), 3, 2);
+
+    auto document = table.Render();
+    auto screen = Screen::Create(Dimension::Fit(document));
+    Render(screen, document);
+    screen.Print();
+    std::cout << std::endl;
 }

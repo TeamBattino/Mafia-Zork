@@ -12,11 +12,10 @@ private:
     Player player;
     int active_town = 0;
 
-    // Functions
     // Print Functions
     bool random_by_chance(int chance);
-
     void handle_base_command(string command);
+    void print_stock();
 
 public:
     // Constructor
@@ -24,11 +23,13 @@ public:
 
     // Functions
     void process_round();
-    void print_status();
+    void print_stats();
     void print_help();
     void run();
     string get_command();
     void recruit();
     void recruit_bribe(int amount);
     void recruit_force();
+    void buy_drug(string drug_name, int amount);
+    void sell_drug(string drug_name, int amount);
 };

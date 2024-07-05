@@ -18,5 +18,5 @@ public:
     int recruits;
     Town();
     Town(string name, int population, vector<Drug> local_drugs);
-    void dothing();
+    int get_drug_index(const std::string &drug_name);
 };
