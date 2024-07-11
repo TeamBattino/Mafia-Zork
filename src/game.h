@@ -25,6 +25,8 @@ public:
     void process_round();
     void print_stats();
     void print_help();
+    void print_ascend();
+
     void run();
     string get_command();
     void recruit();

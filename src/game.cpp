@@ -79,6 +79,10 @@ void Game::handle_base_command(string command)
     {
         recruit();
     }
+    else if (command == "ascend")
+    {
+        print_ascend()
+    }
     else if (command == "switch")
     {
         cout << "Which town do you want to switch to?" << endl;
@@ -221,6 +225,38 @@ void Game::recruit_force()
 }
 
 // Print Functions
+void Game::print_ascend()
+{
+    if (active_town == towns.size() - 1)
+    {
+        cout << "You are already in the last town" << endl;
+        cout << "You have won the game" << endl;
+        return;
+    }
+    if (towns[active_town].reputation < 50)
+    {
+        cout << "You need a reputation of 50 to ascend" << endl;
+        return;
+    }
+    if (towns[active_town].recruits < 5)
+    {
+        cout << "You need at least 5 recruits to ascend" << endl;
+        return;
+    }
+    if (towns[active_town].influence < 50)
+    {
+        cout << "You need an influence of 50 to ascend" << endl;
+        return;
+    }
+    if (player.get_balance() < 1000)
+    {
+        cout << "You need at least 1000 to ascend" << endl;
+        return;
+    }
+    cout << "You have ascended to the next town" << endl;
+    active_town++;
+    cout << "You are now in " << towns[active_town].name << endl;
+}
 void Game::print_help()
 {
     using namespace ftxui;
