@@ -79,6 +79,19 @@ void Game::handle_base_command(string command)
     {
         recruit();
     }
+    else if (command == "switch")
+    {
+        cout << "Which town do you want to switch to?" << endl;
+        for (unsigned long int i = 0; i < towns.size(); i++)
+        {
+            cout << i << " - " << towns[i].name << endl;
+        }
+        int town_index;
+        cin >> town_index;
+        active_town = town_index;
+        cout << "You are now in " << towns[active_town].name << endl;
+    }
+
     else
     {
         cout << "Invalid Command" << endl;
